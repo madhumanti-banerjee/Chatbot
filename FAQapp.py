@@ -30,13 +30,25 @@ if 'vectorstore' not in st.session_state:
     st.session_state.vectorstore = None
 
 # Process the PDF
-def process_pdf(file_path, chunk_size=1000, chunk_overlap=200):
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.vectorstores import Chroma  # ✅ using Chroma instead of FAISS
+
+def process_pdf(file_path, chunk_size, chunk_overlap):
     loader = PyPDFLoader(file_path)
     documents = loader.load_and_split()
-    splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-    texts = splitter.split_documents(documents)
+    
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap
+    )
+    texts = text_splitter.split_documents(documents)
+    
     embeddings = HuggingFaceEmbeddings()
-    return FAISS.from_documents(texts, embeddings)
+    vectorstore = Chroma.from_documents(texts, embedding=embeddings)  # ✅ uses `texts` here
+
+    return vectorstore
 
 # Only process once
 if st.session_state.vectorstore is None:
