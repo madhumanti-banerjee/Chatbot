@@ -5,7 +5,8 @@ import pickle
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import FAISS
+from langchain.vectorstores import Chroma
+vectorstore = Chroma.from_documents(texts, embedding=embeddings)
 import time
 
 # Streamlit config
