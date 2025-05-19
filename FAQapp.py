@@ -8,6 +8,11 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import Chroma
 import time
 
+try:
+    import pysqlite3 as sqlite3
+except ImportError:
+    import sqlite3
+
 # Streamlit config
 st.set_page_config(page_title="PDF FAQ Chatbot", layout="wide")
 st.title("📄 PDF FAQ Chatbot with OpenAI")
