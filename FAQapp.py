@@ -7,15 +7,13 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import Chroma
 import time
-openai.api_key = st.secrets["OPENAI_API_KEY"]
-
 
 # Streamlit config
 st.set_page_config(page_title="PDF FAQ Chatbot", layout="wide")
 st.title("📄 PDF FAQ Chatbot with OpenAI")
 
 # Set OpenAI API key (manually or via sidebar input for security)
-api_key = st.sidebar.text_input("🔑 Enter your OpenAI API Key:", type="password")
+api_key = st.secrets["OPENAI_API_KEY"]
 if not api_key:
     st.warning("Please enter your OpenAI API key.")
     st.stop()
@@ -55,7 +53,7 @@ def process_pdf(file_path, chunk_size, chunk_overlap):
 if st.session_state.vectorstore is None:
     st.info("📄 Processing PDF, please wait...")
     try:
-        st.session_state.vectorstore = process_pdf(PDF_PATH)
+        st.session_state.vectorstore = process_pdf(PDF_PATH, 500, 50)
         st.success("✅ PDF processed successfully.")
     except Exception as e:
         st.error(f"Failed to process PDF: {e}")
