@@ -7,6 +7,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import Chroma
 import time
+openai.api_key = st.secrets["OPENAI_API_KEY"]
+
 
 # Streamlit config
 st.set_page_config(page_title="PDF FAQ Chatbot", layout="wide")
